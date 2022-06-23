@@ -5,8 +5,11 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
-  def
-     new
+  def show
+    @user = User.find(params[:id])
+  end
+
+  def new
     @user = User.new
   end
 
@@ -19,31 +22,21 @@ class UsersController < ApplicationController
     end
   end
 
-  def show
-    @user = User.find(params[:id])
-  end
-
   def edit
     @user = User.find(params[:id])
   end
 
-  def confirm
-    @user = current_user.users.build(user_params)
-    render :new if @user.invalid?
-  end
-
   def update
     @user = User.find(params[:id])
-    if@user.update(user_params)
-      redirect_to user_path(@user.id)
+    if @user.update(user_params)
+      redirect_to user_path(@user.id), notice: "編集しました！"
     else
       render :edit
     end
-
   end
 
   private
-  
+
   def user_params
     params.require( :user).permit(:name, :email, :password, :password_confirmation, :image, :image_cache)
   end
