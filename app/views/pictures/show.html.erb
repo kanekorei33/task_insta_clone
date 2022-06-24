@@ -7,13 +7,9 @@
 
 <p>
   <strong>Photo:</strong>
-  <%= @picture.photo %>
+  <%= image_tag(@picture.photo.url) if @picture.photo.url.present? %>
 </p>
 
-<p>
-  <strong>User:</strong>
-  <%= @picture.user %>
-</p>
 
 <%= link_to 'Edit', edit_picture_path(@picture) %> |
-<%= link_to 'Back', pictures_path %>
+<%= link_to '一覧に戻る', pictures_path %>
