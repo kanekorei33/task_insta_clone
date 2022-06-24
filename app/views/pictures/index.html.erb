@@ -16,13 +16,21 @@
     <% @pictures.each do |picture| %>
       <tr>
         <td><%= picture.content %></td>
-          <% if picture.photo.url.present? %>
-            <td><%= image_tag (picture.photo.url) %></td>
-          <% end %>
+        <% if picture.photo.url.present? %>
+          <td><%= image_tag (picture.photo.url) %></td>
+        <% end %>
         <td><%= picture.user.name %></td>
+
         <td><%= link_to 'Show', picture %></td>
-        <td><%= link_to 'Edit', edit_picture_path(picture) %></td>
-        <td><%= link_to 'Destroy', picture, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+        <% if picture.user_id == current_user.id %>
+          <td><%= link_to_if(true, 'Edit', edit_picture_path(picture)) %></td>
+          <td><%= link_to_if(false, 'Edit', edit_picture_path(picture)){} %></td>
+        <% end %>
+        <% if picture.user_id == current_user.id %>
+          <td><%= link_to_if(true, 'Destroy', picture, method: :delete, data: { confirm: 'Are you sure?' })%></td>
+          <td><%= link_to_if(false, 'Destroy', picture, method: :delete, data: { confirm: 'Are you sure?' }){}%></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
