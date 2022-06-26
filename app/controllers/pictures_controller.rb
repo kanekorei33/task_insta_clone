@@ -1,13 +1,13 @@
 class PicturesController < ApplicationController
   before_action :set_picture, only: %i[ show edit update destroy ]
-  before_action :ensure_correct_user, only: %i[edit update destroy]
+  #before_action :ensure_correct_user, only: %i[edit update destroy]
 
-  def ensure_correct_user
-    if @current_user.id != params[:id].to_i
-      flash[:notice] = "権限がありません"
-      redirect_to pictures_path
-    end
-  end
+  #def ensure_correct_user
+  #  if @current_user.id != @picture.user
+  #    flash[:notice] = "権限がありません"
+  #    redirect_to pictures_path
+  #  end
+  #end
 
   def index
     @pictures = Picture.all
@@ -31,6 +31,10 @@ class PicturesController < ApplicationController
   end
 
   def edit
+    if current_user != @picture.user
+      redirect_to pictures_path
+    end
+  end
   end
 
   def create
@@ -40,6 +44,7 @@ class PicturesController < ApplicationController
       if @picture.save
         format.html { redirect_to picture_url(@picture), notice: "Picture was successfully created." }
         format.json { render :show, status: :created, location: @picture }
+        ContactMailer.contact_mail(@picture.user).deliver
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @picture.errors, status: :unprocessable_entity }
@@ -61,6 +66,9 @@ class PicturesController < ApplicationController
 
   def destroy
     @picture.destroy
+    if current_user != @picture.user
+      redirect_to pictures_path
+   else
     respond_to do |format|
       format.html { redirect_to pictures_url, notice: "Picture was successfully destroyed." }
       format.json { head :no_content }
