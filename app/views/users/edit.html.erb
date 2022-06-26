@@ -1,32 +1,38 @@
-<h1>ユーザープロフィール編集画面</h1>
+<div class="container">
+  <div class="rowalign-items-center">
+    <div class="col-auto mx-auto">
+      <h1>Profile editing</h1>
 
-<% if @user.errors.any? %>
-  <div id="error_explanation">
-    <h2><%= pluralize(@user.errors.count, "error") %> prohibited this <%= @user.name %> from being saved:</h2>
-    <ul>
-    <% @user.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
-    </ul>
+      <% if @user.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@user.errors.count, "error") %> prohibited this <%= @user.name %> from being saved:</h2>
+          <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with(model: @user, local: true) do |f| %>
+        <%= f.label :name %><p>
+        <%= f.text_field :name %><p>
+
+        <%= f.label :email %><p>
+        <%= f.email_field :email %><p>
+
+        <%= f.label :password %><p>
+        <%= f.password_field :password %><p>
+
+        <%= f.label :password_confirmation %><p>
+        <%= f.password_field :password_confirmation %><p>
+          <p>プロフィール画像をアップロード</p>
+        <%= f.file_field :image %><p>
+        <%= f.hidden_field :image_cache %><p>
+
+
+        <%= f.submit "Edit my account" %>
+      <% end %>
+    </div>
   </div>
-<% end %>
-
-<%= form_with(model: @user, local: true) do |f| %>
-  <%= f.label :name %><p>
-  <%= f.text_field :name %><p>
-
-  <%= f.label :email %><p>
-  <%= f.email_field :email %><p>
-
-  <%= f.label :password %><p>
-  <%= f.password_field :password %><p>
-
-  <%= f.label :password_confirmation %><p>
-  <%= f.password_field :password_confirmation %><p>
-    <p>プロフィール画像をアップロード</p>
-  <%= f.file_field :image %><p>
-  <%= f.hidden_field :image_cache %><p>
-
-
-  <%= f.submit "Edit my account" %>
-<% end %>
+</div>

@@ -1,11 +1,18 @@
-<h1>Log in</h1>
-<%= form_with(scope: :session, url: sessions_path, local: true) do |f| %>
+<div class="container">
+  <div class="rowalign-items-center">
+    <div class="col-auto mx-auto">
+      <h1>Insta_Clone</h1>
+      <h1>Log in</h1>
+      <%= form_with(scope: :session, url: sessions_path, local: true) do |f| %>
 
-  <%= f.label :email %>
-  <%= f.email_field :email %>
+        <p><%= f.label :email %></P>
+        <p><%= f.email_field :email %></P>
 
-  <%= f.label :password %>
-  <%= f.password_field :password %>
+        <p><%= f.label :password %></P>
+        <p><%= f.password_field :password %></P>
 
-  <%= f.submit "Log in" %>
-<% end %>
+        <p><%= f.submit "Log in" %></P>
+      <% end %>
+    </div>
+  </div>
+</div>
