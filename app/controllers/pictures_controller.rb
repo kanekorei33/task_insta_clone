@@ -1,13 +1,6 @@
 class PicturesController < ApplicationController
   before_action :set_picture, only: %i[ show edit update destroy ]
-  #before_action :ensure_correct_user, only: %i[edit update destroy]
-
-  #def ensure_correct_user
-  #  if @current_user.id != @picture.user
-  #    flash[:notice] = "権限がありません"
-  #    redirect_to pictures_path
-  #  end
-  #end
+  before_action :correct_user, only: %i[edit update destroy]
 
   def index
     @pictures = Picture.all
@@ -34,7 +27,6 @@ class PicturesController < ApplicationController
     if current_user != @picture.user
       redirect_to pictures_path
     end
-  end
   end
 
   def create
@@ -66,9 +58,7 @@ class PicturesController < ApplicationController
 
   def destroy
     @picture.destroy
-    if current_user != @picture.user
-      redirect_to pictures_path
-   else
+
     respond_to do |format|
       format.html { redirect_to pictures_url, notice: "Picture was successfully destroyed." }
       format.json { head :no_content }
@@ -76,11 +66,18 @@ class PicturesController < ApplicationController
   end
 
   private
-    def set_picture
-      @picture = Picture.find(params[:id])
-    end
+  def set_picture
+    @picture = Picture.find(params[:id])
+  end
 
-    def picture_params
-      params.require(:picture).permit(:content, :photo, :photo_cache, :user, :user_id)
+  def picture_params
+    params.require(:picture).permit(:content, :photo, :photo_cache, :user, :user_id)
+  end
+
+  def correct_user
+    unless Picture.find(params[:id]).user.id.to_i == current_user.id
+        redirect_to pictures_path(current_user)
+        flash[:notice] = "権限がありません"
     end
+  end
 end
