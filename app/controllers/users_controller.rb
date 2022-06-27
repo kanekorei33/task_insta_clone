@@ -25,6 +25,9 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
+    if current_user != @user
+      redirect_to pictures_path
+    end
   end
 
   def update
@@ -44,6 +47,13 @@ class UsersController < ApplicationController
 
   def user_params
     params.require( :user).permit(:name, :email, :password, :password_confirmation, :image, :image_cache)
+  end
+
+  def correct_user
+    unless User.find(params[:id]).user.id.to_i == current_user.id
+        redirect_to pictures_path(current_user)
+        flash[:notice] = "権限がありません"
+    end
   end
 end
 
